@@ -1,5 +1,5 @@
-#creating a VPC
-resource "aws_vpc" "week18-vpc" {
+# Creating a VPC
+resource "aws_vpc" "week18_vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
@@ -8,33 +8,33 @@ resource "aws_vpc" "week18-vpc" {
   }
 }
 
-#creating internet gateway
-resource "aws_internet_gateway" "Week18-Gateway" {
-  vpc_id = aws_vpc.week18-vpc.id
+# Creating Internet Gateway
+resource "aws_internet_gateway" "week18_gateway" {
+  vpc_id = aws_vpc.week18_vpc.id
 
   tags = {
     Name = "Nagesh-Internet-Gateway"
   }
 }
 
-#creating elastic IP address
-resource "aws_eip" "Week18-Elastic-IP" {
-  vpc = true
+# Creating Elastic IP Address
+resource "aws_eip" "week18_elastic_ip" {
+  domain = "vpc"
 }
 
-#creating NAT gateway
-resource "aws_nat_gateway" "Week18-NAT-Gateway" {
-  allocation_id = aws_eip.Week18-Elastic-IP.id
-  subnet_id     = aws_subnet.public-subnet2.id
+# Creating NAT Gateway
+resource "aws_nat_gateway" "week18_nat_gateway" {
+  allocation_id = aws_eip.week18_elastic_ip.id
+  subnet_id     = aws_subnet.public_subnet2.id
 }
 
-#creating NAT route
-resource "aws_route_table" "Week18-Route-two" {
-  vpc_id = aws_vpc.week18-vpc.id
+# Creating NAT Route
+resource "aws_route_table" "week18_route_two" {
+  vpc_id = aws_vpc.week18_vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.Week18-NAT-Gateway.id
+    nat_gateway_id = aws_nat_gateway.week18_nat_gateway.id
   }
 
   tags = {
@@ -42,9 +42,9 @@ resource "aws_route_table" "Week18-Route-two" {
   }
 }
 
-#creating public subnet
-resource "aws_subnet" "public-subnet1" {
-  vpc_id                  = aws_vpc.week18-vpc.id
+# Creating Public Subnet 1
+resource "aws_subnet" "public_subnet1" {
+  vpc_id                  = aws_vpc.week18_vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "eu-west-1a"
   map_public_ip_on_launch = true
@@ -54,9 +54,9 @@ resource "aws_subnet" "public-subnet1" {
   }
 }
 
-#creating public subnet
-resource "aws_subnet" "public-subnet2" {
-  vpc_id                  = aws_vpc.week18-vpc.id
+# Creating Public Subnet 2
+resource "aws_subnet" "public_subnet2" {
+  vpc_id                  = aws_vpc.week18_vpc.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "eu-west-1b"
   map_public_ip_on_launch = true
@@ -66,9 +66,9 @@ resource "aws_subnet" "public-subnet2" {
   }
 }
 
-#creating private subnet
-resource "aws_subnet" "private-subnet1" {
-  vpc_id                  = aws_vpc.week18-vpc.id
+# Creating Private Subnet 1
+resource "aws_subnet" "private_subnet1" {
+  vpc_id                  = aws_vpc.week18_vpc.id
   cidr_block              = "10.0.3.0/24"
   availability_zone       = "eu-west-1a"
   map_public_ip_on_launch = false
@@ -78,9 +78,9 @@ resource "aws_subnet" "private-subnet1" {
   }
 }
 
-#creating private subnet
-resource "aws_subnet" "private-subnet2" {
-  vpc_id                  = aws_vpc.week18-vpc.id
+# Creating Private Subnet 2
+resource "aws_subnet" "private_subnet2" {
+  vpc_id                  = aws_vpc.week18_vpc.id
   cidr_block              = "10.0.4.0/24"
   availability_zone       = "eu-west-1b"
   map_public_ip_on_launch = false
@@ -90,133 +90,133 @@ resource "aws_subnet" "private-subnet2" {
   }
 }
 
-#creating subnet group
-resource "aws_db_subnet_group" "nagesh-week18-subgroup" {
+# Creating Subnet Group
+resource "aws_db_subnet_group" "nagesh_week18_subgroup" {
   name       = "nagesh-week18-subgroup"
-  subnet_ids = [aws_subnet.private-subnet1.id, aws_subnet.private-subnet2.id]
+  subnet_ids = [aws_subnet.private_subnet1.id, aws_subnet.private_subnet2.id]
+
   tags = {
-    Name = "Nagesh data base subnet group"
+    Name = "Nagesh database subnet group"
   }
 }
 
-#creating route table association
-resource "aws_route_table_association" "Week18-Route-two-1" {
-  subnet_id      = aws_subnet.private-subnet1.id
-  route_table_id = aws_route_table.Week18-Route-two.id
-}
-resource "aws_route_table_association" "Week18-Route-two-2" {
-  subnet_id      = aws_subnet.private-subnet2.id
-  route_table_id = aws_route_table.Week18-Route-two.id
+# Creating Route Table Association for Private Subnet 1
+resource "aws_route_table_association" "week18_route_two_1" {
+  subnet_id      = aws_subnet.private_subnet1.id
+  route_table_id = aws_route_table.week18_route_two.id
 }
 
-#creating a security group
-resource "aws_security_group" "Nagesh-sg" {
+# Creating Route Table Association for Private Subnet 2
+resource "aws_route_table_association" "week18_route_two_2" {
+  subnet_id      = aws_subnet.private_subnet2.id
+  route_table_id = aws_route_table.week18_route_two.id
+}
+
+# Creating Security Group
+resource "aws_security_group" "nagesh_sg" {
   name        = "Nagesh-sg"
-  description = "security group for load balancer"
-  vpc_id      = aws_vpc.week18-vpc.id
+  description = "Security group for load balancer"
+  vpc_id      = aws_vpc.week18_vpc.id
 
   ingress {
-    from_port   = "0"
-    to_port     = "0"
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
-    from_port   = "0"
-    to_port     = "0"
+    from_port   = 0
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-#creating a load balancer
-resource "aws_lb" "Nagesh-lb" {
+# Creating Load Balancer
+resource "aws_lb" "nagesh_lb" {
   name               = "Nagesh-lb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = [aws_subnet.public-subnet1.id, aws_subnet.public-subnet2.id]
-  security_groups    = [aws_security_group.Nagesh-sg.id]
+  subnets            = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
+  security_groups    = [aws_security_group.nagesh_sg.id]
 }
 
-#creating load balancer security group
-resource "aws_lb_target_group" "Nagesh-lb-tg" {
+# Creating Load Balancer Target Group
+resource "aws_lb_target_group" "nagesh_lb_tg" {
   name     = "week18targetgroup"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.week18-vpc.id
-
-  depends_on = [aws_vpc.week18-vpc]
+  vpc_id   = aws_vpc.week18_vpc.id
 }
 
-#creating load balancer target group
-resource "aws_lb_target_group_attachment" "Nagesh-target-group1" {
-  target_group_arn = aws_lb_target_group.Nagesh-lb-tg.arn
-  target_id        = aws_instance.Nagesh-web-tier1.id
+# Creating Load Balancer Target Group Attachment 1
+resource "aws_lb_target_group_attachment" "nagesh_target_group1" {
+  target_group_arn = aws_lb_target_group.nagesh_lb_tg.arn
+  target_id        = aws_instance.nagesh_web_tier1.id
   port             = 80
-
-  depends_on = [aws_instance.Nagesh-web-tier1]
 }
-#creating load balancer target group
-resource "aws_lb_target_group_attachment" "Nagesh-target-group2" {
-  target_group_arn = aws_lb_target_group.Nagesh-lb-tg.arn
-  target_id        = aws_instance.Nagesh-web-tier2.id
+
+# Creating Load Balancer Target Group Attachment 2
+resource "aws_lb_target_group_attachment" "nagesh_target_group2" {
+  target_group_arn = aws_lb_target_group.nagesh_lb_tg.arn
+  target_id        = aws_instance.nagesh_web_tier2.id
   port             = 80
-
-  depends_on = [aws_instance.Nagesh-web-tier2]
 }
-#creating load balancer listener
-resource "aws_lb_listener" "nagesh-listener" {
-  load_balancer_arn = aws_lb.Nagesh-lb.arn
-  port              = "80"
+
+# Creating Load Balancer Listener
+resource "aws_lb_listener" "nagesh_listener" {
+  load_balancer_arn = aws_lb.nagesh_lb.arn
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.Nagesh-lb-tg.arn
+    target_group_arn = aws_lb_target_group.nagesh_lb_tg.arn
   }
 }
 
-#creating route table
-resource "aws_route_table" "Nagesh-Web-Tier" {
+# Creating Route Table for Web Tier
+resource "aws_route_table" "nagesh_web_tier" {
   tags = {
     Name = "Nagesh-Web-Tier"
   }
-  vpc_id = aws_vpc.week18-vpc.id
+  vpc_id = aws_vpc.week18_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.Week18-Gateway.id
+    gateway_id = aws_internet_gateway.week18_gateway.id
   }
 }
 
-#creating route table association
-resource "aws_route_table_association" "Week18-web-tier1" {
-  subnet_id      = aws_subnet.public-subnet1.id
-  route_table_id = aws_route_table.Nagesh-Web-Tier.id
+# Creating Route Table Association for Public Subnet 1
+resource "aws_route_table_association" "week18_web_tier1" {
+  subnet_id      = aws_subnet.public_subnet1.id
+  route_table_id = aws_route_table.nagesh_web_tier.id
 }
 
-#creating route table association
-resource "aws_route_table_association" "Week18-web-tier2" {
-  subnet_id      = aws_subnet.public-subnet2.id
-  route_table_id = aws_route_table.Nagesh-Web-Tier.id
+# Creating Route Table Association for Public Subnet 2
+resource "aws_route_table_association" "week18_web_tier2" {
+  subnet_id      = aws_subnet.public_subnet2.id
+  route_table_id = aws_route_table.nagesh_web_tier.id
 }
 
-#creating route table
-resource "aws_route_table" "Week18-DataBase-Tier" {
+# Creating Route Table for Database Tier
+resource "aws_route_table" "week18_database_tier" {
   tags = {
     Name = "DataBase-Tier"
   }
-  vpc_id = aws_vpc.week18-vpc.id
+  vpc_id = aws_vpc.week18_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.Week18-Gateway.id
+    gateway_id = aws_internet_gateway.week18_gateway.id
   }
 }
 
-#creating public security group
-resource "aws_security_group" "Week18-Public-SG-DB" {
+# Creating Public Security Group
+resource "aws_security_group" "week18_public_sg_db" {
   name        = "Week18-Public-SG-DB"
-  description = "web and SSH allowed"
-  vpc_id      = aws_vpc.week18-vpc.id
+  description = "Web and SSH allowed"
+  vpc_id      = aws_vpc.week18_vpc.id
 
   ingress {
     from_port   = 22
@@ -239,3 +239,6 @@ resource "aws_security_group" "Week18-Public-SG-DB" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
+
