@@ -2,7 +2,7 @@
 resource "aws_db_instance" "nagesh_database" {
   allocated_storage      = 10
   engine                 = "mysql"
-  engine_version         = "5.7"
+  engine_version         = "5.7.44"
   instance_class         = "db.t2.micro"
   db_subnet_group_name   = aws_db_subnet_group.nagesh_week18_subgroup.id
   vpc_security_group_ids = [aws_security_group.nagesh_database_tier_lu.id]
