@@ -1,0 +1,1 @@
+https://medium.com/@nageshaks9743/deploying-aws-two-tier-architecture-using-terraform-and-jenkins-pipeline-1fa50624dc09
