@@ -1,24 +1,52 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+    }
+
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-              checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'c4c6589a-4a60-4169-9d8f-0c01dce71188', url: 'https://github.com/NAGESHGOWDA1993/AWS-2-Tier-Architecture.git']]) 
-               
+                git branch: 'main', url: 'https://github.com/sanatcodehub/AwsTwo-Tier-Architecture.git'
             }
         }
-        stage ("Terraform init"){
-         steps {
-            sh("terraform init");
-         }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
         }
-        stage ("Terraform Action"){
-           steps {
-            echo "Terraform action parameter is --> ${action}"
-            sh("terraform ${action} --auto-approve");
-            
-           }
+        
+        stage('Terraform Action') {
+            steps {
+                script {
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            sh 'terraform plan -out=tfplan'
+                            sh 'terraform apply tfplan'
+                        } else {
+                            sh 'terraform apply --auto-approve'
+                        }
+                    } else if (params.action == 'destroy') {
+                        sh 'terraform destroy --auto-approve'
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
+                    }
+                }
+            }
         }
-    } 
-}    
+    }
+    
+    post {
+        always {
+            cleanWs() // Clean up workspace after the pipeline run
+        }
+    }
+}
