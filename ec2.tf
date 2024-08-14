@@ -1,6 +1,6 @@
 # Creating EC2 instance for Web Tier 1
 resource "aws_instance" "nagesh_web_tier1" {
-  ami                         = "ami-0432c2005d3e6a7f4" # Amazon Linux 2 AMI
+  ami                         = "ami-0c38b837cd80f13bb" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet1.id
@@ -21,7 +21,7 @@ resource "aws_instance" "nagesh_web_tier1" {
 
 # Creating EC2 instance for Web Tier 2
 resource "aws_instance" "nagesh_web_tier2" {
-  ami                         = "ami-0432c2005d3e6a7f4" # Amazon Linux 2 AMI
+  ami                         = "ami-0c38b837cd80f13bb" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet2.id
