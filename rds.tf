@@ -43,6 +43,6 @@ resource "aws_security_group" "terraform_database_tier_lu" {
   }
 
   tags = {
-    Name = "Nagesh-Database-SG"
+    Name = "terraform-Database-SG"
   }
 }
