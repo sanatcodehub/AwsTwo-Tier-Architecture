@@ -1,6 +1,6 @@
 # Creating EC2 instance for Web Tier 1
 resource "aws_instance" "terraform_web_tier1" {
-  ami                         = "ami-04e49d62cf88738f1" # Amazon Linux 2 AMI
+  ami                         = "ami-066784287e358dad1" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet1.id
@@ -21,7 +21,7 @@ resource "aws_instance" "terraform_web_tier1" {
 
 # Creating EC2 instance for Web Tier 2
 resource "aws_instance" "terraform_web_tier2" {
-  ami                         = "ami-04e49d62cf88738f1" # Amazon Linux 2 AMI
+  ami                         = "ami-066784287e358dad1" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet2.id
