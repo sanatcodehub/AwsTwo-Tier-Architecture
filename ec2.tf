@@ -1,5 +1,5 @@
 # Creating EC2 instance for Web Tier 1
-resource "aws_instance" "nagesh_web_tier1" {
+resource "aws_instance" "terraform_web_tire1" {
   ami                         = "ami-04e49d62cf88738f1" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
@@ -12,15 +12,15 @@ resource "aws_instance" "nagesh_web_tier1" {
         yum install httpd -y
         systemctl start httpd
         systemctl enable httpd
-        echo "<html><body><h1>This is Nagesh Week18 Project Tier 1 </h1></body></html>" > /var/www/html/index.html
+        echo "<html><body><h1>This is Hellow form server 1 </h1></body></html>" > /var/www/html/index.html
         EOF
   tags = {
-    Name = "nagesh-EC2-1"
+    Name = "Terraform-EC2-1"
   }
 }
 
 # Creating EC2 instance for Web Tier 2
-resource "aws_instance" "nagesh_web_tier2" {
+resource "aws_instance" "terraform_web_tier2" {
   ami                         = "ami-04e49d62cf88738f1" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
@@ -33,9 +33,9 @@ resource "aws_instance" "nagesh_web_tier2" {
         yum install httpd -y
         systemctl start httpd
         systemctl enable httpd
-        echo "<html><body><h1>This is Nagesh Week18 Project Tier 2 </h1></body></html>" > /var/www/html/index.html
+        echo "<html><body><h1>This is Hellow form server 2 </h1></body></html>" > /var/www/html/index.html
         EOF
   tags = {
-    Name = "nagesh-EC2-2"
+    Name = "Terraform-EC2-2"
   }
 }
