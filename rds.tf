@@ -1,25 +1,25 @@
 # Creating RDS Database
-resource "aws_db_instance" "nagesh_database" {
+resource "aws_db_instance" "terraform_database" {
   allocated_storage      = 10
   engine                 = "mysql"
   engine_version         = "5.7.44"
   instance_class         = "db.t2.micro"
-  db_subnet_group_name   = aws_db_subnet_group.nagesh_week18_subgroup.id
-  vpc_security_group_ids = [aws_security_group.nagesh_database_tier_lu.id]
+  db_subnet_group_name   = aws_db_subnet_group.jenkins_terraform_subgroup.id
+  vpc_security_group_ids = [aws_security_group.terraform_database_tier_lu.id]
   username               = "username"  # Replace with your username
   password               = "password"  # Replace with your password
   parameter_group_name   = "default.mysql5.7"
   skip_final_snapshot    = true
   tags = {
-    Name = "Nagesh-RDSDatabase"
+    Name = "terraform-RDSDatabase"
   }
 }
 
 # Creating private security group for Database tier
-resource "aws_security_group" "nagesh_database_tier_lu" {
-  name        = "nagesh_database_tier_lu"
+resource "aws_security_group" "terraform_database_tier_lu" {
+  name        = "terraform_database_tier_lu"
   description = "Allow traffic from SSH & HTTP"
-  vpc_id      = aws_vpc.week18_vpc.id
+  vpc_id      = aws_vpc.terraform_vpc.id
 
   ingress {
     from_port       = 8279  # You can use 3306 (default), 3307, or 8279
