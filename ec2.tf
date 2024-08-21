@@ -1,5 +1,5 @@
 # Creating EC2 instance for Web Tier 1
-resource "aws_instance" "terraform_web_tire1" {
+resource "aws_instance" "terraform_web_tier1" {
   ami                         = "ami-04e49d62cf88738f1" # Amazon Linux 2 AMI
   key_name                    = "kmaster"
   associate_public_ip_address = true
