@@ -5,7 +5,7 @@ resource "aws_instance" "terraform_web_tire1" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet1.id
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.week18_public_sg_db.id]
+  vpc_security_group_ids      = [aws_security_group.terraform_public_sg_db.id]
   user_data                   = <<-EOF
         #!/bin/bash
         yum update -y
@@ -26,7 +26,7 @@ resource "aws_instance" "terraform_web_tier2" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet2.id
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.week18_public_sg_db.id]
+  vpc_security_group_ids      = [aws_security_group.terraform_public_sg_db.id]
   user_data                   = <<-EOF
         #!/bin/bash
         yum update -y
